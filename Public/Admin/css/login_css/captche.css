@@ -1,0 +1,27 @@
+.cap{
+	position: relative;
+	left:8px;
+	top: 25px;
+	border-radius: 100px;
+	width: 100px;
+	height: 40px;
+}
+.cookie{
+	position: relative;
+	/*border: 1px solid red;*/
+	height: 50px;
+	top:23px;
+}
+.cookie .cookie_is_rem{
+	position: absolute;
+	/* left: -104px; */
+	left:24px;
+	top:-21%;
+	width: 20px;
+	height: 20px;
+}
+.cookie .cookie_text{
+	position: absolute;
+	left: 62px;
+	top: 16px;
+}

@@ -1,0 +1,180 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/html5shiv.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/static/h-ui.admin/css/style.css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+
+<link href="__PUBLIC__/Admin/jQueryPage/page.css" type="text/css" rel="stylesheet"/>
+<script type="text/javascript" src="__PUBLIC__/Admin/jQueryPage/page.js"></script>
+<![endif]-->
+<title>权限管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 权限管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="text-c">
+		<form class="Huiform" method="post" action="" target="_self">
+			<!--<input type="text" class="input-text" style="width:250px" placeholder="权限名称" id="" name="">-->
+			<!--<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜权限节点</button>-->
+		</form>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_permission_add('添加权限节点','__MODULE__/Auth/add','700','500')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加权限节点</a></span> <span class="r">共有数据：<strong>{$count}</strong> 条</span> </div>
+	<table class="table table-border table-bordered table-bg">
+		<thead>
+		<tr>
+			<th scope="col" colspan="9">权限节点</th>
+		</tr>
+		<tr class="text-c">
+			<th width="25"><input type="checkbox" name="" value=""></th>
+			<th width="40">ID</th>
+			<th width="">权限名称</th>
+			<th width="">权限上级</th>
+			<th width="">控制器</th>
+			<th width="">方法</th>
+			<th width="">是否菜单栏</th>
+
+			<th width="100">操作</th>
+		</tr>
+		</thead>
+		<tbody>
+		<volist name="auth" id="vol">
+		<tr class="text-c">
+			<td><input type="checkbox" value="1" name=""></td>
+			<td>{$vol.id}</td>
+			<td>{$vol.level|str_repeat='&emsp;',### * 2}{$vol.auth_name}</td>
+			<td>{$vol.pid}</td>
+			<td>{$vol.auth_c}</td>
+			<td>{$vol.auth_a}</td>
+			<td>
+				<if condition=" $vol.is_nav == 1 ">是
+					<else/>
+					否
+					</if>
+			</td>
+			<td><a title="编辑" href="javascript:;" onclick="admin_permission_edit('权限编辑','__MODULE__/Auth/edit/id/{$vol.id}','','','410')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_permission_del(this,'{$vol.id}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+		</tr>
+			</volist>
+		</tbody>
+	</table>
+	<!--<div id="demoContent">-->
+	<!--</div>-->
+	<!--<ul class="page" id="page"></ul>-->
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+
+	<!--自动查询 1，引入datatables。js 另一个就是jquery-->
+	$(function () {
+		$('table').dataTable({
+			"ordering": false, // 禁止排序
+		});
+	})
+/*
+	参数解释：
+	title	标题
+	url		请求的url
+	id		需要操作的数据id
+	w		弹出层宽度（缺省调默认值）
+	h		弹出层高度（缺省调默认值）
+*/
+/*管理员-权限-添加*/
+function admin_permission_add(title,url,w,h){
+	layer_show(title,url,w,h);
+}
+/*管理员-权限-编辑*/
+function admin_permission_edit(title,url,id,w,h){
+	layer_show(title,url,w,h);
+}
+
+/*管理员-权限-删除*/
+function admin_permission_del(obj,id){
+	layer.confirm('确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: '__MODULE__/Auth/del/id/'+id,
+			dataType: 'json',
+			success: function(data){
+				if(data.code == 10000){
+					$(obj).parents("tr").remove();
+					layer.msg('已删除!',{icon:1,time:1000});
+				}else {
+					layer.msg(data.msg,{icon:2,time:1000});
+				}
+
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});		
+	});
+}
+
+$(function () {
+//        控制器处理的json数据；
+	var datas={$auth};
+	options={
+		"id":"page",//显示页码的元素
+		"data":datas,//显示数据
+		"maxshowpageitem":4,//最多显示的页码个数
+		"pagelistcount":10,//每页显示数据个数
+		"callBack":function(result){
+			var cHtml="";
+			cHtml+='<table class="table table-border table-bordered table-bg"><thead>';
+			cHtml +='<tr><th scope="col" colspan="9">权限节点</th></tr>';
+			cHtml +='<tr class="text-c"><th width="25"><input type="checkbox" name="" value=""></th>';
+			cHtml +='<th width="40">ID</th><th >权限名称</th><th >上级id</th><th >控制器</th>';
+			cHtml +='<th >方法</th><th >是否菜单栏</th><th>字段名</th><th width="100">操作</th>';
+			cHtml +='</tr></thead>';
+			cHtml +='<tbody>';
+			for(var i=0;i<result.length;i++){
+				alert(4);
+				cHtml+='<tr class="text-c">';//处理数据
+				cHtml +='<td>'+result[i].id+'</td>';
+				var ss='';
+				if(result[i].level >0){
+					for(var j=0;j< result[i].level *3;j++){
+						ss +="&emsp;";
+					}
+				}
+				cHtml +='<td>'+ss+result[i].auth_name+'</td>';
+				cHtml +='<td>'+result[i].pid+'</td>';
+				cHtml +='<td>'+result[i].auth_c+'</td>';
+				cHtml +='<td>'+result[i].auth_a+'</td>';
+				cHtml +='<td><if condition =" '+result[i].is_nav +' == 1 ">是 <else/> 否</if></td>';
+				cHtml +='<td>';
+				cHtml +='<a title="编辑" href="javascript:;" onclick="admin_permission_edit(\'权限编辑\',\'__MODULE__/Auth/edit/id/\'+result[i].id,\'1\',\'400\',\'310\')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>';
+				cHtml +='<a title="删除" href="javascript:;" onclick="admin_permission_del(this,\'1\')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>';
+				cHtml +='</td>';
+				cHtml +='</tr>';
+			}
+			cHtml +="</tbody>"
+			$("#demoContent").html(cHtml);//将数据增加到页面中
+		}
+	};
+	page.init(datas.length,1,options);
+})
+</script>
+</body>
+</html>
