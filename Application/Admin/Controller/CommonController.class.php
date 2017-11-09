@@ -6,14 +6,15 @@ class CommonController extends Controller{
     public function __construct()
     {
         parent::__construct();
-        if(!session('?Admin_info')){
-            $this->redirect('Admin/Login/login');
-        }
-        if(session('Admin_info.status')== 0){
-            $this->redirect('Admin/Login/login');
-        }
-        $this->checkauth();
-        $this->getnav();
+        session('_token', getGUID());
+        // if(!session('?Admin_info')){
+        //     $this->redirect('Admin/Login/login');
+        // }
+        // if(session('Admin_info.status')== 0){
+        //     $this->redirect('Admin/Login/login');
+        // }
+        // $this->checkauth();
+        // $this->getnav();
     }
 
 //    封装菜单栏左侧
