@@ -16,7 +16,7 @@
   <div class="layui-form-item">
     <label class="layui-form-label">分类名称</label>
     <div class="layui-input-inline">
-      <input type="text" name="name" lay-verify="name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+      <input type="text" name="name" lay-verify="name" placeholder="请输入名称" autocomplete="off" class="layui-input" value="{$alone.name}" />
     </div>
     <div class="layui-form-mid layui-word-aux">请务必填写名称</div>
   </div>
@@ -27,11 +27,12 @@
       <select name="pid">
         <option value="0">顶级分类</option>
         <volist name="data" id="v">
-        <option value="{$v.id}">{$v.name}</option></volist>
+        <option value="{$v.id}" <if condition="$v['id'] eq $alone['pid'] ">selected</if><if condition="$v['id'] eq $alone['id'] ">disabled</if> >{$v.name}</option></volist>
       </select>
     </div>
   </div>
   <div class="layui-form-item">
+    <input type="hidden" name="id" value="{$alone.id}" />
     <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
   </div>
 </form>
@@ -60,7 +61,7 @@ layui.use(['form', 'layedit', 'laydate'], function(){
   //监听提交
   form.on('submit(demo1)', function(data){
     $.ajax({
-      "url":"{:U('Admin/Clothing/classifyAdd')}",
+      "url":"{:U('Admin/Clothing/classifyEdit')}",
       "type":"post",
       "data":data.field,
       "dataType":"json",

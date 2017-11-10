@@ -14,4 +14,6 @@ return array(
     'DB_PORT'               =>  '3306',        // 端口
     'DB_PREFIX'             =>  'web_',    // 数据库表前缀
 
+    // 自定义令牌开关
+    'USER_TOKEN_SWITCH'     =>  true,
 );

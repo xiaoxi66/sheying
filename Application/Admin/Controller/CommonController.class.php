@@ -6,7 +6,7 @@ class CommonController extends Controller{
     public function __construct()
     {
         parent::__construct();
-        session('_token', getGUID());
+        
         // if(!session('?Admin_info')){
         //     $this->redirect('Admin/Login/login');
         // }
@@ -15,6 +15,16 @@ class CommonController extends Controller{
         // }
         // $this->checkauth();
         // $this->getnav();
+    }
+
+    // 设置用户自定义token
+    protected function setToken()
+    {
+        if( C('USER_TOKEN_SWITCH') ){
+            $guid = getGUID();
+            session('_token', $guid);
+            cookie('_token', $guid);
+        }
     }
 
 //    封装菜单栏左侧

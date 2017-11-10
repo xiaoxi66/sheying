@@ -27,18 +27,17 @@
       <!-- <th lay-data="{checkbox:true, fixed: true}"></th> -->
       <th lay-data="{field:'name', width:250}">分类名称</th>
       <th lay-data="{field:'classify', width:250}">上级分类</th>
-      <th lay-data="{width:250, align:'center', toolbar: '#barDemo'}"></th>
+      <th lay-data="{width:246, align:'center', toolbar: '#barDemo'}"></th>
     </tr>
   </thead>
 </table>
  
 <script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-primary layui-btn-mini" lay-event="detail">查看</a>
   <a class="layui-btn layui-btn-mini" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-mini" lay-event="del">删除</a>
 </script>
                
-          
+<script src="__PUBLIC__/Lib/jquery/dist/jquery.min.js" charset="utf-8"></script>
 <script src="__PUBLIC__/Lib/layui/layui.js" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
@@ -51,15 +50,34 @@ layui.use('table', function(){
   //监听工具条
   table.on('tool(demo)', function(obj){
     var data = obj.data;
-    if(obj.event === 'detail'){
-      layer.msg('ID：'+ data.id + ' 的查看操作');
-    } else if(obj.event === 'del'){
-      layer.confirm('真的删除行么', function(index){
-        obj.del();
-        layer.close(index);
+    if(obj.event === 'del'){
+      layer.confirm('真的删除此分类么', function(index){
+      	// layer.alert('删除行：<br>'+ data['id'])
+      	$.ajax({
+	      "url":"{:U('Admin/Clothing/classifyDel')}",
+	      "type":"post",
+	      "data":{'id':data['id']},
+	      "dataType":"json",
+	      "success":function(result){
+	        layer.msg( result['msg'] );
+	        if( result['code']+'' !== '666' ){
+	          return;
+	        }
+	        obj.del();
+	    	layer.close(index);
+	      },
+	    });
+	    
       });
     } else if(obj.event === 'edit'){
-      layer.alert('编辑行：<br>'+ JSON.stringify(data))
+    	layer.open({
+			type: 2,
+			title: '编辑分类',
+			shadeClose: true,
+			shade: 0.8,
+			area: ['600px', '90%'],
+			content: '{:U("Admin/Clothing/classifyEdit")}?id='+ data['id'], //iframe的url
+		});
     }
   });
   
