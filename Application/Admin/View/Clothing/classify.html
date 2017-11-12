@@ -71,13 +71,13 @@ layui.use('table', function(){
       });
     } else if(obj.event === 'edit'){
     	layer.open({
-			type: 2,
-			title: '编辑分类',
-			shadeClose: true,
-			shade: 0.8,
-			area: ['600px', '90%'],
-			content: '{:U("Admin/Clothing/classifyEdit")}?id='+ data['id'], //iframe的url
-		});
+  			type: 2,
+  			title: '编辑分类',
+  			shadeClose: true,
+  			shade: 0.8,
+  			area: ['600px', '90%'],
+  			content: '{:U("Admin/Clothing/classifyEdit")}?id='+ data['id'], //iframe的url
+  		});
     }
   });
   

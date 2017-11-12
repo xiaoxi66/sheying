@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="__PUBLIC__/Lib/layui/css/layui.css"  media="all">
+</head>
+<body>
+          
+<!-- <blockquote class="layui-elem-quote layui-text">
+  目前仅支持二级分类
+</blockquote> -->
+<!-- <form class="layui-form" action="">
+  <div class="layui-form-item">
+    <label class="layui-form-label">分类名称</label>
+    <div class="layui-input-inline">
+      <input type="text" name="name" lay-verify="name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+    </div>
+    <div class="layui-form-mid layui-word-aux">请务必填写名称</div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">上级分类</label>
+    <div class="layui-input-inline">
+      <select name="pid">
+        <option value="0">顶级分类</option>
+        <volist name="data" id="v">
+        <option value="{$v.id}">{$v.name}</option></volist>
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+  </div>
+</form> -->
+<form class="layui-form" action="">
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">基本信息</li>
+    <li>服装Logo</li>
+    <li>服装属性</li>
+    <li>服装详情</li>
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">分类：</label>
+          <div class="layui-input-inline">
+            <select name="cate">
+              <option value="0">请选择分类</option>
+          <volist name="cate" id="value">
+            <if condition="$value['pid'] eq 0 ">
+              <optgroup label="{$value.name}">
+            <else />
+              <option value="{$value.id}">{$value.name}</option>
+            </if>
+              </optgroup>
+          </volist>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">服装名称：</label>
+        <div class="layui-input-block">
+          <input type="text" name="name" lay-verify="required" placeholder="请输入服装名称" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">服装价格：</label>
+        <div class="layui-input-inline">
+          <input type="text" name="price" lay-verify="price" placeholder="请输入服装价格" autocomplete="off" class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">仅支持小数点后2位</div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">库存：</label>
+        <div class="layui-input-inline">
+          <input type="text" name="number" lay-verify="number" placeholder="请输入库存" autocomplete="off" class="layui-input">
+        </div>
+        <!-- <div class="layui-form-mid layui-word-aux">请输入整数</div> -->
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">是否上架</label>
+        <div class="layui-input-block">
+          <input type="checkbox" name="discount" lay-skin="switch" lay-text="ON|OFF">
+        </div>
+      </div>
+      <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">简介</label>
+        <div class="layui-input-block">
+          <textarea placeholder="请输入简介" lay-verify="price" class="layui-textarea"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="layui-tab-item">
+      服装Logo上传 <br>
+    </div>
+    <div class="layui-tab-item">
+      服装属性选择 <br>
+    </div>
+    <div class="layui-tab-item">
+      服装的详细介绍 <br>
+    </div>
+  </div>
+</div>
+</form>
+
+<script src="__PUBLIC__/Lib/jquery/dist/jquery.min.js" charset="utf-8"></script>
+<script src="__PUBLIC__/Lib/layui/layui.js" charset="utf-8"></script>
+
+<script>
+layui.use(['form', 'layedit', 'laydate'], function(){
+  var form = layui.form
+  ,layer = layui.layer
+  ,layedit = layui.layedit
+  ,laydate = layui.laydate;
+
+
+  //自定义验证规则
+  form.verify({
+    name: function(value){
+      if(value.length < 2){
+        return '分类名称至少得2个字符啊';
+      }
+    },
+    price: [/^[1-9]\d*(.\d{1,2})?$/,'请输入正确的价格(仅支持小数点后2位)'],
+    number: [/^[1-9]\d*/, '请输入正整数'],
+  });
+  
+  
+  //监听提交
+  form.on('submit(demo1)', function(data){
+    $.ajax({
+      "url":"{:U('Admin/Clothing/classifyAdd')}",
+      "type":"post",
+      "data":data.field,
+      "dataType":"json",
+      "success":function(result){
+        layer.msg( result['msg'] );
+        if( result['code']+'' !== '666' ){
+          return;
+        }
+        setTimeout(function(){ parent.location.reload(); }, 300);
+      },
+    });
+    return false;
+  });
+  
+  
+});
+layui.use('element', function(){
+  var element = layui.element;
+});
+</script>
+
+</body>
+</html>

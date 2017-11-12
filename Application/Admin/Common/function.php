@@ -1,6 +1,6 @@
 <?php
 // 分类排序方法
-function catePaixu($data = array(), $pid=0, $ceng=0)
+function catePaixu($data = array(), $pid=0, $ceng=0, $panduan=false)
 {
     if( empty($data) )
         return;
@@ -9,10 +9,13 @@ function catePaixu($data = array(), $pid=0, $ceng=0)
 		if($v['pid'] == $pid){
 			$data[$k]['ceng'] = $ceng;
             if( $ceng > 0 )
-                $data[$k]['name'] = '|'. str_repeat('—', $ceng). $data[$k]['name'];
+                if( $panduan )
+                    $data[$k]['name'] = $data[$k]['name'];
+                else
+                    $data[$k]['name'] = '|'. str_repeat('—', $ceng). $data[$k]['name'];
 			$jieguo[] = $data[$k];
             unset($data[$k]);
-			catePaixu($data, $v['id'], $ceng+1);
+			catePaixu($data, $v['id'], $ceng+1, $panduan);
 		}
 	}
 	return $jieguo;

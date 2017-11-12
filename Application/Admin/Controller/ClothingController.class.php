@@ -108,6 +108,7 @@ class ClothingController extends CommonController
 
 	// 处理分类删除
 	// 没有软删除，美中不足
+	// 分类删除暂时没有做下面有无服装的判断
 	public function classifyDel()
 	{
 		if( !IS_AJAX ) die(LAONAINAI);
@@ -126,5 +127,31 @@ class ClothingController extends CommonController
 		$this->ajaxReturn( ['code'=>682, 'msg'=>'删除失败，请稍后重试'] );
 	}
 
+	// 服装列表的展示
+	public function show()
+	{
+		if( IS_AJAX ){
+
+		}else{
+			$this->display('Clothing/showList');
+		}
+	}
+
+	// 服装新增
+	public function clothingAdd()
+	{
+		if( IS_AJAX ){
+
+		}else{
+			$this->setToken();
+			$this->assign(
+				'cate'
+				,catePaixu(
+					M('cate')->alias('a')->field('a.*,b.name as classify')->join('left join web_cate b on a.pid=b.id')->select()
+				, 0, 0, TRUE
+			));
+			$this->display('Clothing/add');
+		}
+	}
 	
 }
