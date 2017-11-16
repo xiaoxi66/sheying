@@ -72,7 +72,8 @@ class AuthController extends Controller  {
             $this->assign('top',$top);
             $auth=D('Auth')->where(['id'=>$id])->find();
             $auth_info=D('Auth')->select();
-//            判断是否有子类，
+           //判断是否有子类，递归获取该权限的ids
+           //然后把有子类的顶级权限给状态1，没有的话就给0，在页面禁用状态1的，不能进行修改分类       
             if($auth.$id==0 ){
                 $ids=getTreeid($auth_info,$id);
                 if($ids){
@@ -86,7 +87,7 @@ class AuthController extends Controller  {
             $this->display();
         }
     }
-    //    权限删除
+    //    权限删除,过滤字段id，
     public function del(){
         $id=I('get.id',0,'intval');
         if($id <=0){
